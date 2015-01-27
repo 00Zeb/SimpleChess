@@ -16,7 +16,7 @@ public class Controller {
 	private final Class<Player>[] classes;
 	private final Map<Class<? extends Player>, Integer> scores = new HashMap<>();
 
-	public static void main(String... args) throws Exception {
+	public static void main(String... args) {
 		System.out.println(new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance()
 				.getTime()));
 		new Controller().generateResult();
