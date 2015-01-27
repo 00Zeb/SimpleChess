@@ -16,12 +16,6 @@ public class Controller {
 	private final Class<Player>[] classes;
 	private final Map<Class<? extends Player>, Integer> scores = new HashMap<>();
 
-	public static void main(String... args) {
-		System.out.println(new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance()
-				.getTime()));
-		new Controller().generateResult();
-	}
-
 	public Controller() {
 		Set<Class<? extends Player>> subTypesOf = new Reflections("player")
 				.getSubTypesOf(Player.class);
@@ -30,8 +24,14 @@ public class Controller {
 			scores.put(player, 0);
 		}
 	}
+	
+	public String runGame() {
+		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance()
+				.getTime()) + "\n";
+		return timestamp + generateResult();
+	}
 
-	private void generateResult() {
+	public String generateResult() {
 
 		for (int i = 0; i < classes.length - 1; i++) {
 			for (int j = i + 1; j < classes.length; j++) {
@@ -40,7 +40,7 @@ public class Controller {
 				}
 			}
 		}
-		printScores();
+		return score();
 	}
 
 	private void runGame(Class<? extends Player> class1, Class<? extends Player> class2,
@@ -74,11 +74,12 @@ public class Controller {
 		scores.put(player, newScore);
 	}
 
-	private void printScores() {
+	private String score() {
 		int bestScore = 0;
 		Class<?> currPlayer = null;
 		int place = 1;
 
+		StringBuilder gameResult = new StringBuilder();
 		while (scores.size() > 0) {
 			bestScore = 0;
 			currPlayer = null;
@@ -89,9 +90,10 @@ public class Controller {
 					currPlayer = player;
 				}
 			}
-			System.out.println(String.format("%02d", place++) + ") " + currPlayer + ": "
-					+ bestScore);
+			gameResult.append(String.format("%02d", place++)).append(") ")
+			.append(currPlayer).append(": ").append(bestScore);
 			scores.remove(currPlayer);
 		}
+		return gameResult.toString();
 	}
 }
