@@ -1,0 +1,12 @@
+apply plugin: "java"
+apply plugin: "eclipse"
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+	compile 'org.reflections:reflections:0.9.9-RC2'
+	compile 'com.google.guava:guava:18.0'
+	compile 'org.javassist:javassist:3.18.2-GA'
+	testCompile 'junit:junit:4.12'
+}
