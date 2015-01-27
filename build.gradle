@@ -1,12 +1,46 @@
 apply plugin: "java"
 apply plugin: "eclipse"
+apply plugin: 'spring-boot'
+
+buildscript {
+	ext {
+		springBootVersion = '1.2.2.BUILD-SNAPSHOT'
+	}
+	repositories {
+		// NOTE: You should declare only repositories that you need here
+		mavenLocal()
+		mavenCentral()
+		maven { url "http://repo.spring.io/release" }
+		maven { url "http://repo.spring.io/milestone" }
+		maven { url "http://repo.spring.io/snapshot" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+jar {
+	baseName = 'spring-boot-simple-chess'
+	version =  '0.0.1'
+}
 
 repositories {
-    mavenCentral()
+	// NOTE: You should declare only repositories that you need here
+	mavenCentral()
+	maven { url "http://repo.spring.io/release" }
+	maven { url "http://repo.spring.io/milestone" }
+	maven { url "http://repo.spring.io/snapshot" }
 }
+
 dependencies {
 	compile 'org.reflections:reflections:0.9.9-RC2'
 	compile 'com.google.guava:guava:18.0'
 	compile 'org.javassist:javassist:3.18.2-GA'
+	compile("org.springframework.boot:spring-boot-starter")
 	testCompile 'junit:junit:4.12'
+	testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.6'
 }

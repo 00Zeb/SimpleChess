@@ -91,7 +91,7 @@ public class Controller {
 				}
 			}
 			gameResult.append(String.format("%02d", place++)).append(") ")
-			.append(currPlayer).append(": ").append(bestScore);
+			.append(currPlayer).append(": ").append(bestScore).append("\n");
 			scores.remove(currPlayer);
 		}
 		return gameResult.toString();
