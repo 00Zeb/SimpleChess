@@ -19,6 +19,10 @@ buildscript {
 	}
 }
 
+configurations {
+    providedRuntime
+}
+
 jar {
 	baseName = 'spring-boot-simple-chess'
 	version =  '0.0.1'
@@ -36,9 +40,12 @@ dependencies {
 	compile 'org.reflections:reflections:0.9.9-RC2'
 	compile 'com.google.guava:guava:18.0'
 	compile 'org.javassist:javassist:3.18.2-GA'
-	compile("org.springframework.boot:spring-boot-starter")
+	compile 'org.springframework.boot:spring-boot-starter'
+	compile 'org.springframework.boot:spring-boot-starter-web'
+	//compile 'org.apache.tomcat.embed:tomcat-embed-jasper:8.0.17'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testCompile 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'junit:junit:4.12'
-	testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
 task wrapper(type: Wrapper) {
