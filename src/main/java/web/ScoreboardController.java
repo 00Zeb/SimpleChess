@@ -12,13 +12,17 @@ import controller.ChessGame;
 
 @Controller
 public class ScoreboardController {
-	private final ChessGame chessGame = new ChessGame();
-	private final String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance()
-			.getTime()) + "\n";
-	
+	private final String timestamp;
+	private final List<String> results;
+
+	public ScoreboardController() {
+		results = new ChessGame().runGame();
+		timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+				.format(Calendar.getInstance().getTime());
+	}
+
 	@RequestMapping("/scoreboard")
 	public String scoreboard(Model model) {
-		List<String> results = chessGame.runGame();
 		model.addAttribute("timestamp", timestamp);
 		model.addAttribute("results", results);
 		return "scoreboard";
