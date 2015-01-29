@@ -1,13 +1,9 @@
-apply plugin: "java"
-apply plugin: "eclipse"
+apply plugin: 'java'
+apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 
 buildscript {
-	ext {
-		springBootVersion = '1.2.2.BUILD-SNAPSHOT'
-	}
 	repositories {
-		// NOTE: You should declare only repositories that you need here
 		mavenLocal()
 		mavenCentral()
 		maven { url "http://repo.spring.io/release" }
@@ -15,21 +11,17 @@ buildscript {
 		maven { url "http://repo.spring.io/snapshot" }
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE")
 	}
 }
 
-configurations {
-    providedRuntime
-}
-
 jar {
-	baseName = 'spring-boot-simple-chess'
+	baseName = 'simply-chess'
 	version =  '0.0.1'
 }
 
 repositories {
-	// NOTE: You should declare only repositories that you need here
+	mavenLocal()
 	mavenCentral()
 	maven { url "http://repo.spring.io/release" }
 	maven { url "http://repo.spring.io/milestone" }
@@ -40,27 +32,15 @@ dependencies {
 	compile 'org.reflections:reflections:0.9.9-RC2'
 	compile 'com.google.guava:guava:18.0'
 	compile 'org.javassist:javassist:3.18.2-GA'
-	compile 'org.springframework.boot:spring-boot-starter'
-	compile 'org.springframework.boot:spring-boot-starter-web'
-	//compile 'org.apache.tomcat.embed:tomcat-embed-jasper:8.0.17'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	testCompile 'org.springframework.boot:spring-boot-starter-test'
+	compile("org.springframework.boot:spring-boot-starter-web")
+	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+	testCompile("org.springframework.boot:spring-boot-starter-test")
 	testCompile 'junit:junit:4.12'
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.6'
+	gradleVersion = '2.1.1'
 }
 
-task stage(type: Copy, dependsOn: [clean, build]) {
-    from jar.archivePath
-    into project.rootDir 
-    rename {
-        'app.jar'
-    }
-}
-stage.mustRunAfter(clean)
 
-clean << {
-    project.file('app.jar').delete()
-}
+

@@ -1,14 +1,14 @@
 package controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.reflections.Reflections;
 
-public class Controller {
+public class ChessGame {
 	public static final int WIN_POINTS = 3;
 	public static final int DRAW_POINTS = 1;
 	public static final int LOSE_POINTS = 0;
@@ -16,7 +16,7 @@ public class Controller {
 	private final Class<Player>[] classes;
 	private final Map<Class<? extends Player>, Integer> scores = new HashMap<>();
 
-	public Controller() {
+	public ChessGame() {
 		Set<Class<? extends Player>> subTypesOf = new Reflections("player")
 				.getSubTypesOf(Player.class);
 		classes = subTypesOf.toArray(new Class[subTypesOf.size()]);
@@ -25,14 +25,12 @@ public class Controller {
 		}
 	}
 	
-	public String runGame() {
-		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance()
-				.getTime()) + "\n";
-		return timestamp + generateResult();
+	public List<String> runGame() {
+		generateResult();
+		return score();
 	}
 
-	public String generateResult() {
-
+	public void generateResult() {
 		for (int i = 0; i < classes.length - 1; i++) {
 			for (int j = i + 1; j < classes.length; j++) {
 				for (int k = 0; k < GAMES_PER_PAIR; k++) {
@@ -40,7 +38,6 @@ public class Controller {
 				}
 			}
 		}
-		return score();
 	}
 
 	private void runGame(Class<? extends Player> class1, Class<? extends Player> class2,
@@ -74,15 +71,13 @@ public class Controller {
 		scores.put(player, newScore);
 	}
 
-	private String score() {
-		int bestScore = 0;
-		Class<?> currPlayer = null;
+	private List<String> score() {
 		int place = 1;
-
-		StringBuilder gameResult = new StringBuilder();
+		List<String> scoringChart = new ArrayList<String>();
 		while (scores.size() > 0) {
-			bestScore = 0;
-			currPlayer = null;
+			StringBuilder playerResult = new StringBuilder();
+			int bestScore = 0;
+			Class<?> currPlayer = null;
 			for (Class player : scores.keySet()) {
 				int playerScore = scores.get(player);
 				if (scores.get(player) >= bestScore) {
@@ -90,10 +85,11 @@ public class Controller {
 					currPlayer = player;
 				}
 			}
-			gameResult.append(String.format("%02d", place++)).append(") ")
-			.append(currPlayer).append(": ").append(bestScore).append("\n");
+			playerResult.append(String.format("%02d", place++)).append(") ")
+			.append(currPlayer.getSimpleName()).append(": ").append(bestScore);
+			scoringChart.add(playerResult.toString());
 			scores.remove(currPlayer);
 		}
-		return gameResult.toString();
+		return scoringChart;
 	}
 }

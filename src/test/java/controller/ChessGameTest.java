@@ -2,9 +2,9 @@ package controller;
 
 import org.junit.Test;
 
-public class ControllerTest {
+public class ChessGameTest {
 	@Test
 	public void runGame() {
-		System.out.println( new Controller().runGame());
+		System.out.println( new ChessGame().runGame());
 	}
 }
