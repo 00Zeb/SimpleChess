@@ -18,7 +18,7 @@ public class TestPlayer extends Player {
 				possibleMoves.add(new Move(piece, p));
 			}
 		}
-		
+		//Adding a commment.
 		int rnd = new Random().nextInt(possibleMoves.size());
 		return possibleMoves.get(rnd);
 	}
