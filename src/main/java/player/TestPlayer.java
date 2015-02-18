@@ -4,8 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import controller.*;
+import org.springframework.stereotype.Service;
 
+import controller.Board;
+import controller.Move;
+import controller.Piece;
+import controller.Player;
+import controller.Point;
+
+@Service
 public class TestPlayer extends Player {
 
 	@Override

@@ -1,33 +1,34 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.reflections.Reflections;
 
 public class ChessGame {
 	public static final int WIN_POINTS = 3;
 	public static final int DRAW_POINTS = 1;
 	public static final int LOSE_POINTS = 0;
 	private static final int GAMES_PER_PAIR = 10;
+	
 	private final Class<Player>[] classes;
 	private final Map<Class<? extends Player>, Integer> scores = new HashMap<>();
 
-	public ChessGame() {
-		Set<Class<? extends Player>> subTypesOf = new Reflections("player")
-				.getSubTypesOf(Player.class);
-		classes = subTypesOf.toArray(new Class[subTypesOf.size()]);
-		for (Class player : classes) {
-			scores.put(player, 0);
+	@SuppressWarnings("unchecked")
+	public ChessGame(List<Player> players) {
+		classes = new Class[players.size()];
+		int i = 0;
+		for (Player p : players) {
+			Class<Player> class1 = (Class<Player>) p.getClass();
+			scores.put(class1, 0);
+			classes[i] = class1;
+			i++;
 		}
 	}
 	
-	public List<String> runGame() {
+	
+	public Map<Class<? extends Player>, Integer> runGame() {
 		generateResult();
-		return score();
+		return scores;
 	}
 
 	public void generateResult() {
@@ -40,7 +41,7 @@ public class ChessGame {
 		}
 	}
 
-	private void runGame(Class<? extends Player> class1, Class<? extends Player> class2,
+	public void runGame(Class<? extends Player> class1, Class<? extends Player> class2,
 			boolean switchSides) {
 		if (switchSides) { // switch sides
 			Class<? extends Player> tempClass = class2;
@@ -69,27 +70,5 @@ public class ChessGame {
 		}
 		int newScore = scores.get(player) + result;
 		scores.put(player, newScore);
-	}
-
-	private List<String> score() {
-		int place = 1;
-		List<String> scoringChart = new ArrayList<String>();
-		while (scores.size() > 0) {
-			StringBuilder playerResult = new StringBuilder();
-			int bestScore = 0;
-			Class<?> currPlayer = null;
-			for (Class player : scores.keySet()) {
-				int playerScore = scores.get(player);
-				if (scores.get(player) >= bestScore) {
-					bestScore = playerScore;
-					currPlayer = player;
-				}
-			}
-			playerResult.append(String.format("%02d", place++)).append(") ")
-			.append(currPlayer.getSimpleName()).append(": ").append(bestScore);
-			scoringChart.add(playerResult.toString());
-			scores.remove(currPlayer);
-		}
-		return scoringChart;
 	}
 }

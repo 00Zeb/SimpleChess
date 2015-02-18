@@ -1,12 +1,16 @@
 package player;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import controller.Board;
 import controller.Move;
 import controller.Piece;
 import controller.Player;
 import controller.Point;
 
+@Service
 public class SimplePlayer extends Player {
 
 	@Override

@@ -29,9 +29,6 @@ repositories {
 }
 
 dependencies {
-	compile 'org.reflections:reflections:0.9.9-RC2'
-	compile 'com.google.guava:guava:18.0'
-	compile 'org.javassist:javassist:3.18.2-GA'
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	testCompile("org.springframework.boot:spring-boot-starter-test")
@@ -55,6 +52,3 @@ stage.mustRunAfter(clean)
 clean << {
     project.file('app.jar').delete()
 }
-
-
-
