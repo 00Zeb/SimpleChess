@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import player.SimplePlayer;
 import player.TestPlayer;
-import player.Zeb;
 import controller.Board;
 import controller.ChessGame;
 import controller.Move;
@@ -28,7 +28,7 @@ public class WatchGameBetween {
 		}
 	}
 
-	public static class WatchablePlayerBlack extends Zeb {
+	public static class WatchablePlayerBlack extends SimplePlayer {
 		@Override
 		public Move getMove(Board board, Player enemy) {
 			WatchGameBetween.board.add(board.copy());
