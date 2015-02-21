@@ -15,6 +15,10 @@ buildscript {
 	}
 }
 
+bootRepackage {
+    mainClass = 'web.Application'
+}
+
 jar {
 	baseName = 'simply-chess'
 	version =  '0.0.1'
@@ -38,7 +42,6 @@ dependencies {
 task wrapper(type: Wrapper) {
 	gradleVersion = '2.2.1'
 }
-
 
 task stage(type: Copy, dependsOn: [clean, build]) {
     from jar.archivePath
