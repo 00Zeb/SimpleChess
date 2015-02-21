@@ -56,6 +56,7 @@ public class ChessGame {
 			addResult(class1, result, false);
 			addResult(class2, result, true);
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Error in game between " + class1 + " and " + class2);
 		}
 	}
