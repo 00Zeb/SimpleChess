@@ -19,10 +19,11 @@ public class ScoreFormatter {
 					currPlayer = player;
 				}
 			}
-			scoringChart.add(new Score(currPlayer.getSimpleName(), bestScore, place++));
+			scoringChart.add(new Score(currPlayer, bestScore, place++));
 			scores.remove(currPlayer);
 		}
 		return scoringChart;
 	}
 
 }
+
