@@ -32,7 +32,7 @@ tr {outline: 1px solid black;}
 			</tr>
 		</thead>
 		<tbody align="left">
-			<tr th:each="player, iterationStatus : ${TotalScore}">
+			<tr th:each="player, iterationStatus : ${totalScore}">
 				<td th:text="${iterationStatus.count}">1</td>
 				<td th:text="${player.value}"></td>
 				<td th:text="${player.key}"></td>
