@@ -1,9 +1,5 @@
 package web;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -17,10 +13,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import controller.ChessGame;
+import controller.FileHandler;
+import controller.HistoryData;
 import controller.Player;
 import controller.Score;
 import controller.ScoreFormatter;
-import controller.ScoreboardHistory;
 
 @Controller
 public class ScoreboardController {
@@ -28,32 +25,36 @@ public class ScoreboardController {
 	private final ChessGame chessGame;
 	private String timestamp;
 	private List<Score> scoreboard;
-	private ScoreboardHistory scoreboardHistory;
+	private HistoryData historyData;
 
 	@Autowired
 	public ScoreboardController(List<Player> players) {
 		chessGame = new ChessGame(players);
 		scoreFormatter = new ScoreFormatter();
-		scoreboardHistory = new ScoreboardHistory();
+		if((historyData = (HistoryData) FileHandler.get("HistoryData")) == null)
+		{
+			historyData = new HistoryData();
+		}
 	}
 	
 	@PostConstruct
 	public void runSimulator() {
 		Map<Class<? extends Player>, Integer> results = chessGame.runGame();
 		scoreboard = scoreFormatter.score(results);
-		scoreboardHistory.loadFromDisk();
-		scoreboardHistory.addScoreboard(scoreboard);
-		scoreboardHistory.saveToDisk();
 		timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
 		.format(Calendar.getInstance().getTime());
+
+		historyData.addScoreboard(scoreboard);
+		historyData.addTimestamp(timestamp);
+		FileHandler.set(historyData, "HistoryData");
 	}
 
 	@RequestMapping("/*")
 	public String scoreboard(Model model) {
 		model.addAttribute("timestamp", timestamp);
-		model.addAttribute("total", scoreboardHistory.getPlayersWithTotalScore());
-		model.addAttribute("results", scoreboard);
-		model.addAttribute("history", scoreboardHistory.getScoreboards());
+		model.addAttribute("totalScore", historyData.getTotalScore());
+		model.addAttribute("currentScoreboard", scoreboard);
+		model.addAttribute("previousScoreboards", historyData.getPreviousScoreboards());
 		return "scoreboard";
 	}
 }

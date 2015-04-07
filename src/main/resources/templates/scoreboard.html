@@ -32,7 +32,7 @@ tr {outline: 1px solid black;}
 			</tr>
 		</thead>
 		<tbody align="left">
-			<tr th:each="player, iterationStatus : ${total}">
+			<tr th:each="player, iterationStatus : ${TotalScore}">
 				<td th:text="${iterationStatus.count}">1</td>
 				<td th:text="${player.value}"></td>
 				<td th:text="${player.key}"></td>
@@ -53,7 +53,7 @@ tr {outline: 1px solid black;}
 			</tr>
 		</thead>
 		<tbody align="left">
-			<tr th:each="player, iterationStatus: ${results}">
+			<tr th:each="player, iterationStatus: ${currentScoreboard}">
 				<td th:text="${iterationStatus.count}">1</td>
 				<td th:text="(${player.score + ' ' + player.reflection})"></td>
 				<td th:text="${player.name}"></td>
@@ -65,8 +65,8 @@ tr {outline: 1px solid black;}
 		<col width="80px" />
 		<col width="80px" />
 		<col width="200px" />
-		<caption>Scoreboard History</caption>
-		<tr th:each="scoreboard : ${history}">
+		<caption>Previous Scoreboards</caption>
+		<tr th:each="scoreboard : ${previousScoreboards}">
 			<thead align="left">
 				<tr>
 					<th th:text="Place"></th>
