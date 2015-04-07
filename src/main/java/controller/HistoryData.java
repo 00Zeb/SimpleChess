@@ -27,7 +27,7 @@ public class HistoryData implements Serializable{
 		return scoreboards.subList(1, scoreboards.size());
 	}
 
-	public List<Entry<String, Integer>> getTotalScore() {
+	public List<Entry<String, Integer>> getTotalScoreWithoutCybercomPlayers() {
 		Map<String, Integer> players = new HashMap<>();
 
 		for (List<Score> scoreboard : scoreboards) {
@@ -46,6 +46,23 @@ public class HistoryData implements Serializable{
 		}
 		return getMapAsSortedList(players);
 	}
+
+	public List<Entry<String, Integer>> getTotalScore() {
+		Map<String, Integer> players = new HashMap<>();
+
+		for (List<Score> scoreboard : scoreboards) {
+			for (Score score : scoreboard) {
+				if (players.get(score.getName()) == null) {
+					players.put(score.getName(), score.getScore());
+				} else {
+					players.put(score.getName(),players.get(score.getName())
+							+ score.getScore());
+				}
+			}
+		}
+		return getMapAsSortedList(players);
+	}
+
 
 	private List<Entry<String, Integer>> getMapAsSortedList(Map<String, Integer> map){
 		List<Entry<String, Integer>> list = new ArrayList<Entry<String, Integer>>(map.entrySet());
