@@ -41,7 +41,6 @@ public class ScoreboardController {
 	public void runSimulator() {
 		Map<Class<? extends Player>, Integer> results = chessGame.runGame();
 		scoreboard = scoreFormatter.score(results);
-		markPlayersUsingReflection();
 		scoreboardHistory.loadFromDisk();
 		scoreboardHistory.addScoreboard(scoreboard);
 		scoreboardHistory.saveToDisk();
@@ -56,34 +55,5 @@ public class ScoreboardController {
 		model.addAttribute("results", scoreboard);
 		model.addAttribute("history", scoreboardHistory.getScoreboards());
 		return "scoreboard";
-	}
-
-	private void markPlayersUsingReflection() {
-		for (Score score : scoreboard) {
-			File file = new File("src/main/java/player/"+ score.getPlayer().getSimpleName() + ".java");
-			BufferedReader br = null;
-
-			try {
-				br = new BufferedReader(new FileReader(file));
-				String line = null;
-				while ((line = br.readLine()) != null) {
-					if (line.contains("java.lang.reflect")) {
-						score.setReflection("*");
-						break;
-					}
-				}
-			}catch (IOException e) {
-				score.setReflection("*");
-				e.printStackTrace();
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
 	}
 }
