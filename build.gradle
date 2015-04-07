@@ -19,6 +19,12 @@ bootRepackage {
     mainClass = 'web.Application'
 }
 
+bootRun {
+    if ( project.hasProperty('args') ) {
+        args project.args.split('\\s+')
+    }
+}
+
 jar {
 	baseName = 'simply-chess'
 	version =  '0.0.1'
