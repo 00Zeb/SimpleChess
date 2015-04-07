@@ -51,6 +51,17 @@ public class ScoreboardController {
 
 	@RequestMapping("/*")
 	public String scoreboard(Model model) {
+		model.addAttribute("otherScoreboard", "/cc");
+		model.addAttribute("timestamp", timestamp);
+		model.addAttribute("totalScore", historyData.getTotalScoreWithoutCybercomPlayers());
+		model.addAttribute("currentScoreboard", scoreboard);
+		model.addAttribute("previousScoreboards", historyData.getPreviousScoreboards());
+		return "scoreboard";
+	}
+
+	@RequestMapping("/cc")
+	public String scoreboardCc(Model model) {
+		model.addAttribute("otherScoreboard", "/*");
 		model.addAttribute("timestamp", timestamp);
 		model.addAttribute("totalScore", historyData.getTotalScore());
 		model.addAttribute("currentScoreboard", scoreboard);
