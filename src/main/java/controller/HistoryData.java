@@ -13,10 +13,17 @@ public class HistoryData implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private List<List<Score>> scoreboards = new ArrayList<>();
 	private List<String> timetamps = new ArrayList<>();
+	Map<String, Map<String, Integer>> mapTotal = new HashMap<>();
 	
 	public void addScoreboard(List<Score> score) {
 		scoreboards.add(0, score);
 	}
+	
+	public List<List<Score>> getScore()
+	{
+		return scoreboards;
+	}
+	
 	public List<String> getMyTimetamps() {
 		return timetamps;
 	}
@@ -25,6 +32,28 @@ public class HistoryData implements Serializable{
 	}
 	public List<List<Score>> getPreviousScoreboards() {
 		return scoreboards.subList(1, scoreboards.size());
+	}
+	
+	public void saveTotalScore(String timestamp)
+	{
+		Map<String, Integer> players = new HashMap<>();
+
+		for (List<Score> scoreboard : scoreboards) {
+			for (Score score : scoreboard) {
+				if (players.get(score.getName()) == null) {
+					players.put(score.getName(), score.getScore());
+				} else {
+					players.put(score.getName(),players.get(score.getName())
+							+ score.getScore());
+				}
+			}
+		}
+		mapTotal.put(timestamp, players);		
+	}
+	
+	public Map<String, Map<String,Integer>> getTotalScoreChart()
+	{
+		return mapTotal;
 	}
 
 	public List<Entry<String, Integer>> getTotalScoreWithoutCybercomPlayers() {

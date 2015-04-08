@@ -15,7 +15,7 @@ import controller.Player;
 
 public class WatchGameBetween {
 	private static final List<Board> board = new ArrayList<Board>();
-
+/*
 	public static void main(String[] args) {
 		Player testPlayer = new TestPlayer();
 		WatchablePlayerBlack watchablePlayerBlack = new WatchablePlayerBlack();
@@ -27,7 +27,7 @@ public class WatchGameBetween {
 			out.println(b.toString());
 		}
 	}
-
+*/
 	public static class WatchablePlayerBlack extends SimplePlayer {
 		@Override
 		public Move getMove(Board board, Player enemy) {
