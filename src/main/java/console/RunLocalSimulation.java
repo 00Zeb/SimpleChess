@@ -15,7 +15,7 @@ import controller.ScoreFormatter;
 
 public class RunLocalSimulation {
 
-/*	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
 		List<Player> players = scanPlayerImplementations();
 		ScoreFormatter scoreFormatter = new ScoreFormatter();
 		ChessGame chessGame = new ChessGame(players);
@@ -24,7 +24,7 @@ public class RunLocalSimulation {
 			System.out.println(score);
 		}
 	}
-*/
+
 	private static List<Player> scanPlayerImplementations() throws Exception {
 		ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(
 				true);
