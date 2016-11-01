@@ -42,7 +42,7 @@ public class ScoreboardControllerTest {
 	public void performGet() throws Exception {
 		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/");
 		mockMvc.perform(mockRequest).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.model().attributeExists("results"));
+				.andExpect(MockMvcResultMatchers.model().attributeExists("totalScore"));
 	}
 
 }

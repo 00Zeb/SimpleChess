@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import web.Application;
+
 public class ChessGame {
 	public static final int WIN_POINTS = 3;
 	public static final int DRAW_POINTS = 1;
@@ -69,7 +71,11 @@ public class ChessGame {
 				result = WIN_POINTS;
 			}
 		}
-		int newScore = scores.get(player) + result;
+		int newScore = scores.get(player) + result * getScoreMultiplier();
 		scores.put(player, newScore);
+	}
+
+	private int getScoreMultiplier(){
+		return Application.ARGS.length < 1 ? 1 : Integer.parseInt(Application.ARGS[0].toString());
 	}
 }

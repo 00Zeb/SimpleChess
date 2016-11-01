@@ -1,5 +1,9 @@
 package controller;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +23,41 @@ public class ScoreFormatter {
 					currPlayer = player;
 				}
 			}
-			scoringChart.add(new Score(currPlayer.getSimpleName(), bestScore, place++));
+			scoringChart.add(new Score(currPlayer, bestScore, place++));
 			scores.remove(currPlayer);
 		}
+		markPlayersUsingReflection(scoringChart);
 		return scoringChart;
 	}
 
+	private void markPlayersUsingReflection(List<Score> scoringChart) {
+		for (Score score : scoringChart) {
+			File file = new File("src/main/java/player/"+ score.getPlayer().getSimpleName() + ".java");
+			BufferedReader br = null;
+
+			try {
+				br = new BufferedReader(new FileReader(file));
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					if (line.contains("java.lang.reflect")) {
+						score.setReflection("*");
+						break;
+					}
+				}
+			}catch (IOException e) {
+				score.setReflection("*");
+				e.printStackTrace();
+			} finally {
+				if (br != null) {
+					try {
+						br.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
 }
+

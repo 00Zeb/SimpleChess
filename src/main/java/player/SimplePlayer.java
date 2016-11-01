@@ -9,7 +9,7 @@ import controller.Move;
 import controller.Piece;
 import controller.Player;
 import controller.Point;
-
+import java.lang.reflect.*;
 @Service
 public class SimplePlayer extends Player {
 
