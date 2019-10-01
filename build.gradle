@@ -1,15 +1,28 @@
+buildscript {
+    dependencies {
+        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
+    }
+}
+
+
 plugins {
 	id 'org.springframework.boot' version '2.1.8.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
 }
 
-group = 'com.zebula'
-version = '0.0.1-SNAPSHOT'
+apply plugin: 'com.palantir.docker'
+
+
 sourceCompatibility = '11'
 
 repositories {
+	mavenLocal()
 	mavenCentral()
+}
+
+springBoot {
+    mainClassName = 'web.Application'
 }
 
 dependencies {
@@ -17,4 +30,24 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+
+group = 'com.cyberchess'
+
+bootJar {
+    baseName = 'cyberchess'
+    version = '0.0.1-SNAPSHOT'
+}
+
+// tag::task[]
+task unpack(type: Copy) {
+    dependsOn bootJar
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("build/dependency")
+}
+docker {
+    name "${project.group}/${bootJar.baseName}"
+    copySpec.from(tasks.unpack.outputs).into("dependency")
+    buildArgs(['DEPENDENCY': "dependency"])
 }
