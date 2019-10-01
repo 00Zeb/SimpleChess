@@ -1,66 +1,18 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'spring-boot'
-
-buildscript {
-	repositories {
-		mavenLocal()
-		mavenCentral()
-		maven { url "http://repo.spring.io/release" }
-		maven { url "http://repo.spring.io/milestone" }
-		maven { url "http://repo.spring.io/snapshot" }
-			maven { url "http://repo1.maven.org/maven2/org/jfree/jfreechart/1.0.15/" }
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE")
-	}
+plugins {
+	id 'org.springframework.boot' version '2.1.8.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
 }
 
-bootRepackage {
-    mainClass = 'web.Application'
-}
-
-bootRun {
-    if ( project.hasProperty('args') ) {
-        args project.args.split('\\s+')
-    }
-}
-
-jar {
-	baseName = 'simply-chess'
-	version =  '0.0.1'
-}
+group = 'com.zebula'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
 
 repositories {
-	mavenLocal()
 	mavenCentral()
-	maven { url "http://repo.spring.io/release" }
-	maven { url "http://repo.spring.io/milestone" }
-	maven { url "http://repo.spring.io/snapshot" }
-	maven { url "http://repo1.maven.org/maven2/org/jfree/jfreechart/1.0.15/" }
 }
 
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-web")
-	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-	compile 'org.jfree:jfreechart:1.0.15'	
-	testCompile("org.springframework.boot:spring-boot-starter-test")
-	testCompile 'junit:junit:4.12'
-}
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '2.2.1'
-}
-
-task stage(type: Copy, dependsOn: [clean, build]) {
-    from jar.archivePath
-    into project.rootDir 
-    rename {
-        'app.jar'
-    }
-}
-stage.mustRunAfter(clean)
-
-clean << {
-    project.file('app.jar').delete()
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

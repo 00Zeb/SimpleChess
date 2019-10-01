@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import controller.ChessGame;
 import controller.FileHandler;
@@ -49,23 +48,23 @@ public class ScoreboardController {
 		FileHandler.set(historyData, "HistoryData");
 	}
 
-	@RequestMapping("/*")
-	public String scoreboard(Model model) {
-		model.addAttribute("otherScoreboard", "/cc");
-		model.addAttribute("timestamp", timestamp);
-		model.addAttribute("totalScore", historyData.getTotalScoreWithoutCybercomPlayers());
-		model.addAttribute("currentScoreboard", scoreboard);
-		model.addAttribute("previousScoreboards", historyData.getPreviousScoreboards());
-		return "scoreboard";
-	}
-
-	@RequestMapping("/cc")
-	public String scoreboardCc(Model model) {
-		model.addAttribute("otherScoreboard", "/*");
-		model.addAttribute("timestamp", timestamp);
-		model.addAttribute("totalScore", historyData.getTotalScore());
-		model.addAttribute("currentScoreboard", scoreboard);
-		model.addAttribute("previousScoreboards", historyData.getPreviousScoreboards());
-		return "scoreboard";
-	}
+//	@RequestMapping("/*")
+//	public String scoreboard(Model model) {
+//		model.addAttribute("otherScoreboard", "/cc");
+//		model.addAttribute("timestamp", timestamp);
+//		model.addAttribute("totalScore", historyData.getTotalScoreWithoutCybercomPlayers());
+//		model.addAttribute("currentScoreboard", scoreboard);
+//		model.addAttribute("previousScoreboards", historyData.getPreviousScoreboards());
+//		return "scoreboard";
+//	}
+//
+//	@RequestMapping("/cc")
+//	public String scoreboardCc(Model model) {
+//		model.addAttribute("otherScoreboard", "/*");
+//		model.addAttribute("timestamp", timestamp);
+//		model.addAttribute("totalScore", historyData.getTotalScore());
+//		model.addAttribute("currentScoreboard", scoreboard);
+//		model.addAttribute("previousScoreboards", historyData.getPreviousScoreboards());
+//		return "scoreboard";
+//	} 
 }
