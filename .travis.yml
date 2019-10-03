@@ -2,6 +2,8 @@ language: java
 deploy:
   provider: heroku       
   on: version2
+  app:
+    version2: simply-chess
   api_key:
     secure: m9UK00Z1NIAyRvNaz8Ko8IPWs4D0sIODTc18gay25EKvMjUW+9A/GfTfk29drC91dRMGuWg1hrgzehvPUKdz9fjNsQ9GFcHKwgnxfw3MbHtkRcU3cQ/JNHkgbXzSJnYCvxInn281SjJEgK3+PUwyru9sPx7G7X8cTb0uUNkT7nbxiFcQT1489GZ/SWkm/oo4Hqr46ZnW+Fp3r4XtKRz0VlMoAJyXMN1yhR3KvSvOpiz+6cFaiolfesg/9Gz14J7r6fcPLzxapO2t6Ooa7x8ljQnn7dUEnEiVbE6kAlMlwogQkntck1j/fEnrH2mC7GywUwTvpwAutHbMpwcycAD/mG2FNrT4KoQW2mn7r1GBgVzpEqCItDnPGM0miLvcf6iB2ASdAZe0rXf1UsX4J3vMZECZATCoX0CB89yEB/LxtmjAwZvIUYTHEm/ah/Vg6vUvGtRBcMgAbKCUSXnjPUBpvdiMdlXG4kVEWnYka6BGngzXMpRToCBeDR4bUuz7oHDjOLGLB0U6zBEVY/0pTXYwM562tRgrawersoJKJC/kWGvVdPbcQSBOfYoJ/tVNZdVBaCNgt47TLMTNdOSVuQg9J7Bxe3c0Z4a6GmNby4AzmHQeQ/9MUWLQfqM1+lwLLZev6XSKR3IZYHY4RQLAjiGRlcSQrPBXAL1tYfAAplkVIo4=
 
