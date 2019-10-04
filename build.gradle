@@ -14,7 +14,7 @@ plugins {
 apply plugin: 'com.palantir.docker'
 
 
-sourceCompatibility = '11'
+sourceCompatibility = '8'
 
 repositories {
 	mavenLocal()
