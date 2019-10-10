@@ -30,34 +30,34 @@ public class ScoreFormatter {
 		return scoringChart;
 	}
 
-	private void markPlayersUsingReflection(List<Score> scoringChart) {
-		for (Score score : scoringChart) {
-			File file = new File("src/main/java/player/"+ score.getPlayer().getSimpleName() + ".java");
-			BufferedReader br = null;
-
-			try {
-				br = new BufferedReader(new FileReader(file));
-				String line = null;
-				while ((line = br.readLine()) != null) {
-					if (line.contains("java.lang.reflect")) {
-						score.setReflection("*");
-						break;
-					}
-				}
-			}catch (IOException e) {
-				score.setReflection("*");
-				e.printStackTrace();
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-	}
+//	private void markPlayersUsingReflection(List<Score> scoringChart) {
+//		for (Score score : scoringChart) {
+//			File file = new File("src/main/java/player/"+ score.getPlayer().getSimpleName() + ".java");
+//			BufferedReader br = null;
+//
+//			try {
+//				br = new BufferedReader(new FileReader(file));
+//				String line = null;
+//				while ((line = br.readLine()) != null) {
+//					if (line.contains("java.lang.reflect")) {
+//						score.setReflection("*");
+//						break;
+//					}
+//				}
+//			}catch (IOException e) {
+//				score.setReflection("*");
+//				e.printStackTrace();
+//			} finally {
+//				if (br != null) {
+//					try {
+//						br.close();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//		}
+//	}
 
 }
 
