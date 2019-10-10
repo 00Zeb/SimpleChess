@@ -8,6 +8,7 @@ before_install:
   - ./gradlew build docker
 deploy:
   provider: heroku       
+  skip_cleanup: true
   on: version2
   app:
     version2: simply-chess
