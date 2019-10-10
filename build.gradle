@@ -50,7 +50,6 @@ task unpack(type: Copy) {
 docker {
     name "${project.group}/${bootJar.baseName}"
     files tasks.bootJar.outputs.files.singleFile
-     copySpec.into("mydir")
     //copySpec.from(tasks.unpack.outputs).into("dependency")
     //buildArgs(['DEPENDENCY': "dependency"])
 }

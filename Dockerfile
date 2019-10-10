@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
-COPY build/docker/mydir/cyberchess-0.0.1-SNAPSHOT.jar /app
+COPY build/docker/cyberchess-0.0.1-SNAPSHOT.jar /app
 CMD ["java","-jar","/app/cyberchess-0.0.1-SNAPSHOT.jar"]
 #ARG DEPENDENCY=build/docker/dependency
 #COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
