@@ -26,7 +26,7 @@ public class ScoreFormatter {
 			scoringChart.add(new Score(currPlayer, bestScore, place++));
 			scores.remove(currPlayer);
 		}
-		markPlayersUsingReflection(scoringChart);
+//		markPlayersUsingReflection(scoringChart);
 		return scoringChart;
 	}
 
