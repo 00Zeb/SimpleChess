@@ -18,7 +18,6 @@ public class ChessGameTest {
 		chessGame.runGame();
 		verify(chessGame, Mockito.times(10)).runGame(anyplayer(), anyplayer(),
 				Mockito.anyBoolean());
-		;
 	}
 
 	private Class<Player> anyplayer() {

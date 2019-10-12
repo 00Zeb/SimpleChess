@@ -4,7 +4,6 @@ buildscript {
     }
 }
 
-
 plugins {
 	id 'org.springframework.boot' version '2.1.8.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
@@ -13,8 +12,6 @@ plugins {
 }
 
 apply plugin: 'com.palantir.docker'
-
-
 sourceCompatibility = '8'
 
 repositories {
@@ -33,7 +30,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-
 group = 'com.cyberchess'
 
 bootJar {
@@ -41,15 +37,7 @@ bootJar {
     version = '0.0.1-SNAPSHOT'
 }
 
-// tag::task[]
-task unpack(type: Copy) {
-    dependsOn bootJar
-    from(tasks.bootJar.outputs.files.singleFile)
-    into("build/dependency")
-}
 docker {
     name "${project.group}/${bootJar.baseName}"
-  //  files tasks.bootJar.outputs.files.singleFile
-    copySpec.from(tasks.bootJar.outputs.files.singleFile).into("dependency")
-    buildArgs(['DEPENDENCY': "dependency"])
+    copySpec.from(tasks.bootJar.outputs.files.singleFile).into("artifact")
 }
