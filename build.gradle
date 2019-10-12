@@ -1,27 +1,24 @@
 buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
     dependencies {
-        classpath 'com.bmuschko:gradle-docker-plugin:5.2.0'
+        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
     }
 }
 
 
 plugins {
-	id 'war'
 	id 'org.springframework.boot' version '2.1.8.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
 	id 'eclipse'
-	id 'com.bmuschko.docker-spring-boot-application' version '5.2.0'
 }
+
+apply plugin: 'com.palantir.docker'
 
 
 sourceCompatibility = '8'
 
 repositories {
-	//mavenLocal()
+	mavenLocal()
 	mavenCentral()
 }
 
@@ -44,9 +41,15 @@ bootJar {
     version = '0.0.1-SNAPSHOT'
 }
 
-docker {
-    springBootApplication {
-        baseImage = 'openjdk:8-alpine'
-    }
+// tag::task[]
+task unpack(type: Copy) {
+    dependsOn bootJar
+    from(tasks.bootJar.outputs.files.singleFile)
+    into("build/dependency")
 }
-
+docker {
+    name "${project.group}/${bootJar.baseName}"
+  //  files tasks.bootJar.outputs.files.singleFile
+    copySpec.from(tasks.unpack.outputs).into("dependency")
+    buildArgs(['DEPENDENCY': "dependency"])
+}
