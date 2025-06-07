@@ -1,10 +1,12 @@
 package controller;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 
 import java.util.Arrays;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import player.SimplePlayer;
@@ -16,12 +18,8 @@ public class ChessGameTest {
 	public void runGame() {
 		ChessGame chessGame = Mockito.spy(new ChessGame(Arrays.asList(new TestPlayer(), new SimplePlayer())));
 		chessGame.runGame();
-		verify(chessGame, Mockito.times(10)).runGame(anyplayer(), anyplayer(),
-				Mockito.anyBoolean());
-		;
+		verify(chessGame, Mockito.times(10)).runGame(any(Player.class), any(Player.class),
+				anyBoolean());
 	}
 
-	private Class<Player> anyplayer() {
-		return Mockito.anyObject();
-	}
 }

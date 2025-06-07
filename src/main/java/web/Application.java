@@ -1,16 +1,15 @@
 package web;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@ComponentScan({"player","controller","web"})
-@EnableAutoConfiguration
+@SpringBootApplication(scanBasePackages = {"player","controller","web"})
 public class Application {
+
 	public static String[] ARGS = new String[0];
 
     public static void main(String[] args) {
-    	ARGS = args;
+        ARGS = args;
         SpringApplication.run(Application.class, args);
     }
 

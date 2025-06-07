@@ -1,66 +1,62 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'spring-boot'
-
-buildscript {
-	repositories {
-		mavenLocal()
-		mavenCentral()
-		maven { url "http://repo.spring.io/release" }
-		maven { url "http://repo.spring.io/milestone" }
-		maven { url "http://repo.spring.io/snapshot" }
-			maven { url "http://repo1.maven.org/maven2/org/jfree/jfreechart/1.0.15/" }
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE")
-	}
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.1'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
-bootRepackage {
-    mainClass = 'web.Application'
-}
+group = 'com.simplechess'
+version = '0.0.1'
 
-bootRun {
-    if ( project.hasProperty('args') ) {
-        args project.args.split('\\s+')
+// Ensure we're using Java 21
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
-jar {
-	baseName = 'simply-chess'
-	version =  '0.0.1'
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenLocal()
-	mavenCentral()
-	maven { url "http://repo.spring.io/release" }
-	maven { url "http://repo.spring.io/milestone" }
-	maven { url "http://repo.spring.io/snapshot" }
-	maven { url "http://repo1.maven.org/maven2/org/jfree/jfreechart/1.0.15/" }
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-web")
-	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-	compile 'org.jfree:jfreechart:1.0.15'	
-	testCompile("org.springframework.boot:spring-boot-starter-test")
-	testCompile 'junit:junit:4.12'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.jfree:jfreechart:1.5.4'
+    
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }
 
-task wrapper(type: Wrapper) {
-	gradleVersion = '2.2.1'
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+jar {
+    archiveBaseName = 'simply-chess'
+    archiveVersion = '0.0.1'
 }
 
 task stage(type: Copy, dependsOn: [clean, build]) {
-    from jar.archivePath
-    into project.rootDir 
+    from jar.archiveFile
+    into project.rootDir
     rename {
         'app.jar'
     }
 }
+
 stage.mustRunAfter(clean)
 
-clean << {
-    project.file('app.jar').delete()
+tasks.register('cleanAppJar', Delete) {
+    delete 'app.jar'
 }
+
+clean.dependsOn cleanAppJar
