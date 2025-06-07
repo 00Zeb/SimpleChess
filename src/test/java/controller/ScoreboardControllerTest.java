@@ -55,7 +55,7 @@ class ScoreboardControllerTest {
         @Test
         @DisplayName("Should return scoreboard view for root path")
         void shouldReturnScoreboardViewForRootPath() throws Exception {
-            mockMvc.perform(get("/"))
+            mockMvc.perform(get("/legacy/"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("scoreboard"))
                     .andExpect(model().attributeExists("otherScoreboard"))
@@ -68,7 +68,7 @@ class ScoreboardControllerTest {
         @Test
         @DisplayName("Should have correct other scoreboard link")
         void shouldHaveCorrectOtherScoreboardLink() throws Exception {
-            mockMvc.perform(get("/"))
+            mockMvc.perform(get("/legacy/"))
                     .andExpect(status().isOk())
                     .andExpect(model().attribute("otherScoreboard", "/cc"));
         }
@@ -76,7 +76,7 @@ class ScoreboardControllerTest {
         @Test
         @DisplayName("Should have non-null timestamp")
         void shouldHaveNonNullTimestamp() throws Exception {
-            mockMvc.perform(get("/"))
+            mockMvc.perform(get("/legacy/"))
                     .andExpect(status().isOk())
                     .andExpect(model().attribute("timestamp", notNullValue()));
         }
@@ -89,7 +89,7 @@ class ScoreboardControllerTest {
         @Test
         @DisplayName("Should return scoreboard view for CC path")
         void shouldReturnScoreboardViewForCCPath() throws Exception {
-            mockMvc.perform(get("/cc"))
+            mockMvc.perform(get("/legacy/cc"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("scoreboard"))
                     .andExpect(model().attributeExists("otherScoreboard"))
@@ -102,7 +102,7 @@ class ScoreboardControllerTest {
         @Test
         @DisplayName("Should have correct other scoreboard link for CC")
         void shouldHaveCorrectOtherScoreboardLinkForCC() throws Exception {
-            mockMvc.perform(get("/cc"))
+            mockMvc.perform(get("/legacy/cc"))
                     .andExpect(status().isOk())
                     .andExpect(model().attribute("otherScoreboard", "/*"));
         }
@@ -115,7 +115,7 @@ class ScoreboardControllerTest {
         @Test
         @DisplayName("Should include all required model attributes")
         void shouldIncludeAllRequiredModelAttributes() throws Exception {
-            mockMvc.perform(get("/"))
+            mockMvc.perform(get("/legacy/"))
                     .andExpect(status().isOk())
                     .andExpect(model().attributeExists(
                             "otherScoreboard",
@@ -129,7 +129,7 @@ class ScoreboardControllerTest {
         @Test
         @DisplayName("Should have valid scoreboard data structure")
         void shouldHaveValidScoreboardDataStructure() throws Exception {
-            mockMvc.perform(get("/"))
+            mockMvc.perform(get("/legacy/"))
                     .andExpect(status().isOk())
                     .andExpect(model().attribute("currentScoreboard", notNullValue()))
                     .andExpect(model().attribute("previousScoreboards", notNullValue()));
@@ -144,7 +144,7 @@ class ScoreboardControllerTest {
         @DisplayName("Should handle wildcard paths")
         void shouldHandleWildcardPaths() throws Exception {
             // Since the controller uses "/*" mapping, any path should work
-            mockMvc.perform(get("/any-path"))
+            mockMvc.perform(get("/legacy/any-path"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("scoreboard"));
         }

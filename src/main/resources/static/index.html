@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Tournament Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-chess-king me-2"></i>
+                Chess Tournament Dashboard
+            </a>
+            <div class="navbar-nav ms-auto">
+                <button class="btn btn-outline-light me-2" id="runGameBtn">
+                    <i class="fas fa-play me-1"></i>
+                    Run New Game
+                </button>
+                <button class="btn btn-outline-info" id="refreshBtn">
+                    <i class="fas fa-sync-alt me-1"></i>
+                    Refresh
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- Status Bar -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="card-title">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Last Updated
+                                </h6>
+                                <p class="card-text" id="lastUpdated">Loading...</p>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="card-title">
+                                    <i class="fas fa-gamepad me-1"></i>
+                                    Total Games
+                                </h6>
+                                <p class="card-text" id="totalGames">0</p>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="card-title">
+                                    <i class="fas fa-users me-1"></i>
+                                    Players
+                                </h6>
+                                <p class="card-text" id="totalPlayers">0</p>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="card-title">
+                                    <i class="fas fa-server me-1"></i>
+                                    Status
+                                </h6>
+                                <p class="card-text">
+                                    <span class="badge bg-success" id="connectionStatus">Connected</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row">
+            <!-- Current Scoreboard -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-trophy me-2"></i>
+                            Current Tournament Results
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Player</th>
+                                        <th>Score</th>
+                                        <th>Win Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="currentScoreboard">
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">
+                                            <i class="fas fa-spinner fa-spin me-2"></i>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Scores -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-chart-line me-2"></i>
+                            Overall Leaderboard
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Player</th>
+                                        <th>Total Score</th>
+                                        <th>Games</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="totalScoreboard">
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">
+                                            <i class="fas fa-spinner fa-spin me-2"></i>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game History -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-history me-2"></i>
+                            Game History
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="gameHistory">
+                            <p class="text-center text-muted">
+                                <i class="fas fa-spinner fa-spin me-2"></i>
+                                Loading game history...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Running Modal -->
+    <div class="modal fade" id="gameRunningModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-chess me-2"></i>
+                        Running Tournament
+                    </h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Tournament in progress...</p>
+                    <p class="text-muted">This may take a few moments.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

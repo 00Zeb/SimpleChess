@@ -1,0 +1,253 @@
+/* Chess Tournament Dashboard Styles */
+
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --success-color: #27ae60;
+    --info-color: #3498db;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --light-color: #ecf0f1;
+    --dark-color: #2c3e50;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+    border-bottom: none;
+    padding: 1rem 1.5rem;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.5em 0.75em;
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Rank badges */
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.rank-1 {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #333;
+}
+
+.rank-2 {
+    background: linear-gradient(135deg, #c0c0c0, #e5e5e5);
+    color: #333;
+}
+
+.rank-3 {
+    background: linear-gradient(135deg, #cd7f32, #daa520);
+    color: white;
+}
+
+.rank-other {
+    background: linear-gradient(135deg, #6c757d, #adb5bd);
+    color: white;
+}
+
+/* Player type indicators */
+.player-type {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+/* Win rate progress bars */
+.win-rate-bar {
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #e9ecef;
+}
+
+.win-rate-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease-in-out;
+}
+
+.win-rate-excellent {
+    background: linear-gradient(90deg, #28a745, #20c997);
+}
+
+.win-rate-good {
+    background: linear-gradient(90deg, #17a2b8, #6f42c1);
+}
+
+.win-rate-average {
+    background: linear-gradient(90deg, #ffc107, #fd7e14);
+}
+
+.win-rate-poor {
+    background: linear-gradient(90deg, #dc3545, #e83e8c);
+}
+
+/* Connection status */
+.connection-status {
+    position: relative;
+}
+
+.connection-status::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: translateY(-50%) scale(1.2);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+    }
+}
+
+/* Game history timeline */
+.game-history-item {
+    border-left: 3px solid var(--info-color);
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.game-history-item::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 0.5rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: var(--info-color);
+}
+
+.game-history-item:last-child {
+    border-left-color: transparent;
+}
+
+/* Loading animations */
+.loading-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #e9ecef;
+    }
+    
+    .card {
+        background-color: #2d3748;
+        color: #e9ecef;
+    }
+    
+    .table {
+        color: #e9ecef;
+    }
+    
+    .table-striped > tbody > tr:nth-of-type(odd) > td {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+}

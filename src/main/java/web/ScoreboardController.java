@@ -20,6 +20,7 @@ import controller.Score;
 import controller.ScoreFormatter;
 
 @Controller
+@RequestMapping("/legacy")
 public class ScoreboardController {
 
 	private final ScoreFormatter scoreFormatter;
