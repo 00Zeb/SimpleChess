@@ -1,0 +1,30 @@
+{
+  "name": "simple-chess-tests",
+  "version": "1.0.0",
+  "description": "JavaScript unit tests for Simple Chess application",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testMatch": [
+      "**/src/test/resources/static/js/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "src/main/resources/static/js/**/*.js",
+      "!src/main/resources/static/js/**/*.min.js"
+    ],
+    "coverageDirectory": "build/test-results/javascript/coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ]
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

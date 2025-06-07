@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.1'
     id 'io.spring.dependency-management' version '1.1.4'
+    id 'com.github.node-gradle.node' version '7.0.1'
 }
 
 group = 'com.simplechess'
@@ -45,8 +46,34 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }
 
+// Node.js configuration
+node {
+    version = '20.10.0'
+    npmVersion = '10.2.3'
+    download = true
+    workDir = file("${project.buildDir}/nodejs")
+    npmWorkDir = file("${project.buildDir}/npm")
+}
+
+// JavaScript test configuration
+task installJestDependencies(type: NpmTask) {
+    description = 'Install Jest and testing dependencies'
+    args = ['install', '--save-dev', 'jest@29.7.0', 'jest-environment-jsdom@29.7.0']
+    inputs.file('package.json')
+    outputs.dir('node_modules')
+}
+
+task runJavaScriptTests(type: NpmTask) {
+    dependsOn installJestDependencies
+    description = 'Run JavaScript unit tests with Jest'
+    args = ['test']
+    inputs.dir('src/test/resources/static/js')
+    outputs.dir('build/test-results/javascript')
+}
+
 tasks.named('test') {
     useJUnitPlatform()
+    dependsOn runJavaScriptTests
 }
 
 jar {

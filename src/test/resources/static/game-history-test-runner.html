@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game History Unit Tests</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-summary {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .test-summary.all-pass {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .test-summary.some-fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .test-case {
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #ddd;
+        }
+        
+        .test-case.pass {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+        
+        .test-case.fail {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+        
+        .test-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .test-details {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .test-data {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin: 5px 0;
+            overflow-x: auto;
+        }
+        
+        .run-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .run-button:hover {
+            background: #0056b3;
+        }
+        
+        .icon {
+            margin-right: 8px;
+        }
+        
+        #console-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Game History Unit Tests</h1>
+        
+        <button class="run-button" onclick="runAllTests()">
+            <span class="icon">▶️</span>
+            Run Tests
+        </button>
+        
+        <div id="test-summary" class="test-summary">
+            Click "Run Tests" to execute the unit tests
+        </div>
+        
+        <div id="test-results"></div>
+        
+        <div id="console-output" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Mock the game history logic from dashboard.js (corrected version)
+        function updateGameHistory(previousScoreboards) {
+            if (!previousScoreboards || previousScoreboards.length === 0) {
+                return { message: 'No previous games', games: [] };
+            }
+
+            // Get the first 5 games (newest games are at the start of the array)
+            // Array structure: [newest, newer, new, old, older, oldest...]
+            const last5Games = previousScoreboards.slice(0, 5);
+            const totalGames = previousScoreboards.length;
+            
+            const games = last5Games.map((scoreboard, index) => {
+                // Calculate the actual game number (newest games are at start of array)
+                // index 0 = newest game, index 1 = second newest, etc.
+                const gameNumber = totalGames - index;
+                return {
+                    gameNumber: gameNumber,
+                    scoreboard: scoreboard,
+                    players: scoreboard.map(player => ({
+                        name: player.name,
+                        score: player.score,
+                        rank: player.rank
+                    }))
+                };
+            });
+            
+            return { games: games };
+        }
+
+        // Helper function to create mock game data
+        function createMockScoreboards(totalGames) {
+            const scoreboards = [];
+            
+            // Create games in reverse order (newest first in array)
+            for (let gameNum = totalGames; gameNum >= 1; gameNum--) {
+                const scoreboard = [
+                    { 
+                        name: 'CCPlayer', 
+                        score: 30 + gameNum, 
+                        rank: 1,
+                        playerType: 'player.CCPlayer'
+                    },
+                    { 
+                        name: 'TestPlayer', 
+                        score: 20 + gameNum, 
+                        rank: 2,
+                        playerType: 'player.TestPlayer'
+                    },
+                    { 
+                        name: 'SimplePlayer', 
+                        score: 10 + gameNum, 
+                        rank: 3,
+                        playerType: 'player.SimplePlayer'
+                    }
+                ];
+                scoreboards.push(scoreboard);
+            }
+            
+            return scoreboards;
+        }
+
+        // Test definitions
+        const tests = [
+            {
+                name: "Should show last 5 games when more than 5 games exist",
+                test: function() {
+                    const mockData = createMockScoreboards(8);
+                    const result = updateGameHistory(mockData);
+                    const expectedGameNumbers = [8, 7, 6, 5, 4];
+                    const actualGameNumbers = result.games.map(g => g.gameNumber);
+                    
+                    return {
+                        pass: JSON.stringify(expectedGameNumbers) === JSON.stringify(actualGameNumbers),
+                        expected: expectedGameNumbers,
+                        actual: actualGameNumbers,
+                        details: `Should show games ${expectedGameNumbers.join(', ')} but got ${actualGameNumbers.join(', ')}`
+                    };
+                }
+            },
+            
+            {
+                name: "Should show all games when less than 5 games exist",
+                test: function() {
+                    const mockData = createMockScoreboards(3);
+                    const result = updateGameHistory(mockData);
+                    const expectedGameNumbers = [3, 2, 1];
+                    const actualGameNumbers = result.games.map(g => g.gameNumber);
+                    
+                    return {
+                        pass: JSON.stringify(expectedGameNumbers) === JSON.stringify(actualGameNumbers),
+                        expected: expectedGameNumbers,
+                        actual: actualGameNumbers,
+                        details: `Should show all games ${expectedGameNumbers.join(', ')} but got ${actualGameNumbers.join(', ')}`
+                    };
+                }
+            },
+            
+            {
+                name: "Should show exactly 5 games when exactly 5 games exist",
+                test: function() {
+                    const mockData = createMockScoreboards(5);
+                    const result = updateGameHistory(mockData);
+                    const expectedGameNumbers = [5, 4, 3, 2, 1];
+                    const actualGameNumbers = result.games.map(g => g.gameNumber);
+                    
+                    return {
+                        pass: JSON.stringify(expectedGameNumbers) === JSON.stringify(actualGameNumbers),
+                        expected: expectedGameNumbers,
+                        actual: actualGameNumbers,
+                        details: `Should show games ${expectedGameNumbers.join(', ')} but got ${actualGameNumbers.join(', ')}`
+                    };
+                }
+            },
+            
+            {
+                name: "Should show correct scores for each game",
+                test: function() {
+                    const mockData = createMockScoreboards(3);
+                    const result = updateGameHistory(mockData);
+                    
+                    const game3Scores = result.games[0].players.map(p => p.score); // [33, 23, 13]
+                    const game2Scores = result.games[1].players.map(p => p.score); // [32, 22, 12]
+                    const game1Scores = result.games[2].players.map(p => p.score); // [31, 21, 11]
+                    
+                    const expectedGame3 = [33, 23, 13];
+                    const expectedGame2 = [32, 22, 12];
+                    const expectedGame1 = [31, 21, 11];
+                    
+                    const scoresMatch = 
+                        JSON.stringify(game3Scores) === JSON.stringify(expectedGame3) &&
+                        JSON.stringify(game2Scores) === JSON.stringify(expectedGame2) &&
+                        JSON.stringify(game1Scores) === JSON.stringify(expectedGame1);
+                    
+                    return {
+                        pass: scoresMatch,
+                        expected: { game3: expectedGame3, game2: expectedGame2, game1: expectedGame1 },
+                        actual: { game3: game3Scores, game2: game2Scores, game1: game1Scores },
+                        details: `Scores should be different for each game`
+                    };
+                }
+            },
+            
+            {
+                name: "Should handle empty game list",
+                test: function() {
+                    const mockData = [];
+                    const result = updateGameHistory(mockData);
+                    
+                    return {
+                        pass: result.message === 'No previous games' && result.games.length === 0,
+                        expected: { message: 'No previous games', gamesCount: 0 },
+                        actual: { message: result.message, gamesCount: result.games.length },
+                        details: `Should return 'No previous games' message`
+                    };
+                }
+            },
+            
+            {
+                name: "Should handle large number of games (show only last 5)",
+                test: function() {
+                    const mockData = createMockScoreboards(20);
+                    const result = updateGameHistory(mockData);
+                    const expectedGameNumbers = [20, 19, 18, 17, 16];
+                    const actualGameNumbers = result.games.map(g => g.gameNumber);
+                    
+                    return {
+                        pass: JSON.stringify(expectedGameNumbers) === JSON.stringify(actualGameNumbers) && 
+                              result.games.length === 5,
+                        expected: { games: expectedGameNumbers, count: 5 },
+                        actual: { games: actualGameNumbers, count: result.games.length },
+                        details: `Should show only last 5 games from 20 total`
+                    };
+                }
+            }
+        ];
+
+        function runAllTests() {
+            const consoleOutput = document.getElementById('console-output');
+            const testResults = document.getElementById('test-results');
+            const testSummary = document.getElementById('test-summary');
+            
+            // Show console and clear previous results
+            consoleOutput.style.display = 'block';
+            consoleOutput.textContent = '';
+            testResults.innerHTML = '';
+            
+            let passCount = 0;
+            let output = '🧪 Running Game History Unit Tests...\n\n';
+            
+            tests.forEach((testCase, index) => {
+                try {
+                    const result = testCase.test();
+                    
+                    if (result.pass) {
+                        passCount++;
+                        output += `✅ Test ${index + 1}: ${testCase.name}\n`;
+                        
+                        testResults.innerHTML += `
+                            <div class="test-case pass">
+                                <div class="test-name">✅ ${testCase.name}</div>
+                                <div class="test-details">PASSED</div>
+                            </div>
+                        `;
+                    } else {
+                        output += `❌ Test ${index + 1}: ${testCase.name}\n`;
+                        output += `   Expected: ${JSON.stringify(result.expected)}\n`;
+                        output += `   Actual: ${JSON.stringify(result.actual)}\n`;
+                        output += `   Details: ${result.details}\n\n`;
+                        
+                        testResults.innerHTML += `
+                            <div class="test-case fail">
+                                <div class="test-name">❌ ${testCase.name}</div>
+                                <div class="test-details">${result.details}</div>
+                                <div class="test-data">Expected: ${JSON.stringify(result.expected)}</div>
+                                <div class="test-data">Actual: ${JSON.stringify(result.actual)}</div>
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    output += `💥 Test ${index + 1}: ${testCase.name} - ERROR: ${error.message}\n`;
+                    
+                    testResults.innerHTML += `
+                        <div class="test-case fail">
+                            <div class="test-name">💥 ${testCase.name}</div>
+                            <div class="test-details">ERROR: ${error.message}</div>
+                        </div>
+                    `;
+                }
+            });
+            
+            output += `\n📊 Test Results: ${passCount}/${tests.length} tests passed\n`;
+            
+            if (passCount === tests.length) {
+                output += '🎉 All tests passed! Game history logic is working correctly.';
+                testSummary.textContent = `🎉 All ${tests.length} tests passed!`;
+                testSummary.className = 'test-summary all-pass';
+            } else {
+                output += '⚠️  Some tests failed. Please check the implementation.';
+                testSummary.textContent = `⚠️ ${passCount}/${tests.length} tests passed`;
+                testSummary.className = 'test-summary some-fail';
+            }
+            
+            consoleOutput.textContent = output;
+        }
+    </script>
+</body>
+</html>

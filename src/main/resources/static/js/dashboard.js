@@ -303,15 +303,16 @@ class ChessDashboard {
         // Clear container first to ensure clean update
         container.innerHTML = '';
 
-        // Get the last 5 games (most recent first)
-        // If we have [0,1,2,3,4,5,6,7] we want [7,6,5,4,3] (last 5, reverse order)
-        const last5Games = previousScoreboards.slice(-5).reverse();
+        // Get the first 5 games (newest games are at the start of the array)
+        // If we have [newest, newer, new, old, older, oldest] we want [newest, newer, new, old, older] (first 5)
+        const last5Games = previousScoreboards.slice(0, 5);
         const totalGames = previousScoreboards.length;
 
         let html = '<div class="row">';
 
         last5Games.forEach((scoreboard, index) => {
-            // Calculate the actual game number (most recent games first)
+            // Calculate the actual game number (newest games are at start of array)
+            // If we have 46 total games, index 0 = game 46, index 1 = game 45, etc.
             const gameNumber = totalGames - index;
 
             html += `
