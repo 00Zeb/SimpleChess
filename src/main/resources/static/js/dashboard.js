@@ -6,7 +6,8 @@ class ChessDashboard {
         this.stompClient = null;
         this.isConnected = false;
         this.gameRunningModal = null;
-        
+        this.gameTimeout = null;
+
         this.init();
     }
 
@@ -36,6 +37,15 @@ class ChessDashboard {
                 this.stompClient.subscribe('/topic/scoreboard', (message) => {
                     const scoreboard = JSON.parse(message.body);
                     this.updateScoreboard(scoreboard);
+
+                    // Hide modal if it's showing (game completed via WebSocket)
+                    if (this.gameRunningModal) {
+                        const modalElement = document.getElementById('gameRunningModal');
+                        if (modalElement && modalElement.classList.contains('show')) {
+                            this.hideGameModal();
+                            this.showSuccess('Game completed successfully!');
+                        }
+                    }
                 });
             },
             (error) => {
@@ -77,27 +87,78 @@ class ChessDashboard {
 
     async runNewGame() {
         try {
+            // Show the modal with spinner
             this.gameRunningModal.show();
-            
+
+            // Disable the run game button to prevent multiple clicks
+            const runGameBtn = document.getElementById('runGameBtn');
+            runGameBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Running...';
+            runGameBtn.disabled = true;
+
+            // Set a timeout to hide modal after 30 seconds if no response
+            this.gameTimeout = setTimeout(() => {
+                this.hideGameModal();
+                this.showError('Game is taking longer than expected. Please refresh to see results.');
+            }, 30000);
+
             const response = await fetch(`${this.apiBase}/game/run`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 this.updateScoreboard(data);
+                this.hideGameModal();
                 this.showSuccess('Game completed successfully!');
             } else {
+                this.hideGameModal();
                 this.showError('Failed to run game');
             }
         } catch (error) {
             console.error('Error running game:', error);
+            this.hideGameModal();
             this.showError('Error running game');
-        } finally {
-            this.gameRunningModal.hide();
+        }
+    }
+
+    hideGameModal() {
+        // Clear timeout if it exists
+        if (this.gameTimeout) {
+            clearTimeout(this.gameTimeout);
+            this.gameTimeout = null;
+        }
+
+        // Hide modal using manual class removal with delay
+        // The 100ms timeout is necessary for Bootstrap modal state management
+        const modalElement = document.getElementById('gameRunningModal');
+        if (modalElement) {
+            setTimeout(() => {
+                modalElement.classList.remove('show');
+                modalElement.style.display = 'none';
+                modalElement.setAttribute('aria-hidden', 'true');
+                modalElement.removeAttribute('aria-modal');
+
+                // Remove backdrop if it exists
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+
+                // Remove modal-open class from body
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            }, 100);
+        }
+
+        // Restore button state
+        const runGameBtn = document.getElementById('runGameBtn');
+        if (runGameBtn) {
+            runGameBtn.innerHTML = '<i class="fas fa-play me-1"></i>Run New Game';
+            runGameBtn.disabled = false;
         }
     }
 
