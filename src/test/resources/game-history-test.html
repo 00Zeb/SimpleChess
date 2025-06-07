@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game History Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-case { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .test-case h3 { margin-top: 0; }
+        .result { margin: 10px 0; padding: 10px; background: #f5f5f5; }
+        .pass { background: #d4edda; color: #155724; }
+        .fail { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>Game History Logic Test</h1>
+    
+    <div id="test-results"></div>
+    
+    <script>
+        // Mock the game history logic from dashboard.js
+        function updateGameHistory(previousScoreboards) {
+            if (!previousScoreboards || previousScoreboards.length === 0) {
+                return { message: 'No previous games', games: [] };
+            }
+
+            // Get the last 5 games (most recent first)
+            const last5Games = previousScoreboards.slice(-5).reverse();
+            const totalGames = previousScoreboards.length;
+            
+            const games = last5Games.map((scoreboard, index) => {
+                const gameNumber = totalGames - index;
+                return {
+                    gameNumber: gameNumber,
+                    scoreboard: scoreboard
+                };
+            });
+            
+            return { games: games };
+        }
+
+        // Test cases
+        function runTests() {
+            const results = [];
+            
+            // Test 1: More than 5 games (8 games total)
+            const test1Data = [];
+            for (let i = 1; i <= 8; i++) {
+                test1Data.push([
+                    { name: `Player1_Game${i}`, score: 100 + i },
+                    { name: `Player2_Game${i}`, score: 50 + i }
+                ]);
+            }
+            
+            const result1 = updateGameHistory(test1Data);
+            const expected1 = [8, 7, 6, 5, 4]; // Should show last 5 games
+            const actual1 = result1.games.map(g => g.gameNumber);
+            
+            results.push({
+                name: "Test 1: 8 games total - should show last 5 games",
+                expected: expected1,
+                actual: actual1,
+                pass: JSON.stringify(expected1) === JSON.stringify(actual1)
+            });
+            
+            // Test 2: Less than 5 games (3 games total)
+            const test2Data = [];
+            for (let i = 1; i <= 3; i++) {
+                test2Data.push([
+                    { name: `Player1_Game${i}`, score: 100 + i },
+                    { name: `Player2_Game${i}`, score: 50 + i }
+                ]);
+            }
+            
+            const result2 = updateGameHistory(test2Data);
+            const expected2 = [3, 2, 1]; // Should show all 3 games
+            const actual2 = result2.games.map(g => g.gameNumber);
+            
+            results.push({
+                name: "Test 2: 3 games total - should show all games",
+                expected: expected2,
+                actual: actual2,
+                pass: JSON.stringify(expected2) === JSON.stringify(actual2)
+            });
+            
+            // Test 3: Exactly 5 games
+            const test3Data = [];
+            for (let i = 1; i <= 5; i++) {
+                test3Data.push([
+                    { name: `Player1_Game${i}`, score: 100 + i },
+                    { name: `Player2_Game${i}`, score: 50 + i }
+                ]);
+            }
+            
+            const result3 = updateGameHistory(test3Data);
+            const expected3 = [5, 4, 3, 2, 1]; // Should show all 5 games
+            const actual3 = result3.games.map(g => g.gameNumber);
+            
+            results.push({
+                name: "Test 3: 5 games total - should show all 5 games",
+                expected: expected3,
+                actual: actual3,
+                pass: JSON.stringify(expected3) === JSON.stringify(actual3)
+            });
+            
+            // Test 4: No games
+            const result4 = updateGameHistory([]);
+            results.push({
+                name: "Test 4: No games - should show 'No previous games'",
+                expected: "No previous games",
+                actual: result4.message || "Games found",
+                pass: result4.message === "No previous games"
+            });
+            
+            // Test 5: 10 games - should still only show last 5
+            const test5Data = [];
+            for (let i = 1; i <= 10; i++) {
+                test5Data.push([
+                    { name: `Player1_Game${i}`, score: 100 + i },
+                    { name: `Player2_Game${i}`, score: 50 + i }
+                ]);
+            }
+            
+            const result5 = updateGameHistory(test5Data);
+            const expected5 = [10, 9, 8, 7, 6]; // Should show last 5 games
+            const actual5 = result5.games.map(g => g.gameNumber);
+            
+            results.push({
+                name: "Test 5: 10 games total - should show last 5 games",
+                expected: expected5,
+                actual: actual5,
+                pass: JSON.stringify(expected5) === JSON.stringify(actual5)
+            });
+            
+            return results;
+        }
+
+        // Display results
+        function displayResults() {
+            const results = runTests();
+            const container = document.getElementById('test-results');
+            
+            let html = '';
+            let passCount = 0;
+            
+            results.forEach(result => {
+                if (result.pass) passCount++;
+                
+                html += `
+                    <div class="test-case">
+                        <h3>${result.name}</h3>
+                        <div class="result ${result.pass ? 'pass' : 'fail'}">
+                            <strong>Status:</strong> ${result.pass ? 'PASS' : 'FAIL'}<br>
+                            <strong>Expected:</strong> ${JSON.stringify(result.expected)}<br>
+                            <strong>Actual:</strong> ${JSON.stringify(result.actual)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html = `
+                <div class="test-case">
+                    <h2>Test Summary: ${passCount}/${results.length} tests passed</h2>
+                </div>
+            ` + html;
+            
+            container.innerHTML = html;
+        }
+
+        // Run tests when page loads
+        document.addEventListener('DOMContentLoaded', displayResults);
+    </script>
+</body>
+</html>

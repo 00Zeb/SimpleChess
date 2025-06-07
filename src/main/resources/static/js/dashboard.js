@@ -294,20 +294,31 @@ class ChessDashboard {
 
     updateGameHistory(previousScoreboards) {
         const container = document.getElementById('gameHistory');
-        
+
         if (!previousScoreboards || previousScoreboards.length === 0) {
             container.innerHTML = '<p class="text-center text-muted">No previous games</p>';
             return;
         }
 
+        // Clear container first to ensure clean update
+        container.innerHTML = '';
+
+        // Get the last 5 games (most recent first)
+        // If we have [0,1,2,3,4,5,6,7] we want [7,6,5,4,3] (last 5, reverse order)
+        const last5Games = previousScoreboards.slice(-5).reverse();
+        const totalGames = previousScoreboards.length;
+
         let html = '<div class="row">';
-        
-        previousScoreboards.slice(0, 5).forEach((scoreboard, index) => {
+
+        last5Games.forEach((scoreboard, index) => {
+            // Calculate the actual game number (most recent games first)
+            const gameNumber = totalGames - index;
+
             html += `
                 <div class="col-md-6 col-lg-4 mb-3">
                     <div class="card">
                         <div class="card-header bg-light">
-                            <h6 class="mb-0">Game ${index + 1}</h6>
+                            <h6 class="mb-0">Game ${gameNumber}</h6>
                         </div>
                         <div class="card-body p-2">
                             <div class="table-responsive">
@@ -319,7 +330,7 @@ class ChessDashboard {
                                                     <span class="badge bg-secondary">${rank + 1}</span>
                                                 </td>
                                                 <td>${this.getPlayerDisplayName(player.name)}</td>
-                                                <td class="text-end">${player.score}</td>
+                                                <td class="text-end"><strong>${player.score}</strong></td>
                                             </tr>
                                         `).join('')}
                                     </tbody>
@@ -330,9 +341,14 @@ class ChessDashboard {
                 </div>
             `;
         });
-        
+
         html += '</div>';
+
+        // Force DOM update
         container.innerHTML = html;
+
+        // Force a reflow to ensure the update is visible
+        container.offsetHeight;
     }
 
     showSuccess(message) {
